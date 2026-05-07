@@ -3,23 +3,16 @@ import { useFrame } from '@react-three/fiber';
 import { useRef, useState } from 'react';
 import type { Group } from 'three';
 import type { Tactic } from '../../game/types';
+import { CoachModel } from './CoachModel';
 
 type CoachAvatarProps = {
   tactic: Tactic;
   phase: string;
 };
 
-function CoachAvatar({ tactic, phase }: CoachAvatarProps) {
-  const group = useRef<Group>(null);
-  const [open, setOpen] = useState(true);
-
-  useFrame(({ clock }) => {
-    if (!group.current) return;
-    group.current.rotation.y = -0.35 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
-  });
-
+function PrimitiveCoach() {
   return (
-    <group ref={group} position={[13.2, 0, -4.8]} onClick={(event) => { event.stopPropagation(); setOpen((current) => !current); }}>
+    <>
       <mesh castShadow position={[0, 1.78, 0]}>
         <sphereGeometry args={[0.25, 24, 18]} />
         <meshStandardMaterial color="#b9855d" roughness={0.58} />
@@ -40,6 +33,22 @@ function CoachAvatar({ tactic, phase }: CoachAvatarProps) {
         <ringGeometry args={[0.58, 0.68, 48]} />
         <meshBasicMaterial color="#73d2ff" transparent opacity={0.72} />
       </mesh>
+    </>
+  );
+}
+
+function CoachAvatar({ tactic, phase }: CoachAvatarProps) {
+  const group = useRef<Group>(null);
+  const [open, setOpen] = useState(true);
+
+  useFrame(({ clock }) => {
+    if (!group.current) return;
+    group.current.rotation.y = -0.35 + Math.sin(clock.elapsedTime * 0.9) * 0.08;
+  });
+
+  return (
+    <group ref={group} position={[13.2, 0, -4.8]} onClick={(event) => { event.stopPropagation(); setOpen((current) => !current); }}>
+      <CoachModel fallback={<PrimitiveCoach />} />
       {open && (
         <Html position={[-0.2, 2.55, 0]} center distanceFactor={10} transform>
           <div className="coach-card">

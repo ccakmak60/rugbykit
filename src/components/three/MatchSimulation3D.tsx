@@ -8,6 +8,7 @@ import { CoachAvatar } from './CoachAvatar';
 import { RugbyAvatar } from './RugbyAvatar';
 import { RugbyPitch } from './RugbyPitch';
 import { TacticalZones } from './TacticalZones';
+import { TrainingGroundProps } from './TrainingGroundProps';
 import { getRoute } from './phaseRoutes';
 
 const avatarSlots: [number, number, number][] = [
@@ -51,6 +52,7 @@ function Scenario({ minute, phase, player, squad, tactic, tactics, selectedPlaye
       <directionalLight position={[4, 10, 5]} intensity={1.7} castShadow shadow-mapSize={[2048, 2048]} />
       <spotLight position={[-6, 8, -6]} angle={0.45} penumbra={0.8} intensity={1.2} color="#b8ff6a" />
       <RugbyPitch />
+      <TrainingGroundProps />
       <TacticalZones tactics={tactics} selectedTacticId={selectedTacticId} onSelectTactic={onSelectTactic} />
       <CoachAvatar tactic={tactic} phase={phase} />
       <Ball minute={minute} tactic={tactic} />
