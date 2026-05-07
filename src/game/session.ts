@@ -1,6 +1,9 @@
-import type { EventLog, Player } from './types';
+import type { PhaseObjective } from "./objectives";
+import type { MatchState } from "./matchState";
+import type { OpponentPressure } from "./pressure";
+import type { EventLog, Player } from "./types";
 
-type AppScreen = 'home' | 'mode' | 'brief' | 'simulation' | 'debrief';
+type AppScreen = "home" | "mode" | "brief" | "simulation" | "debrief";
 
 type SessionSnapshot = {
   screen: AppScreen;
@@ -12,6 +15,10 @@ type SessionSnapshot = {
   selectedTacticId: string;
   selectedFocusId: string;
   week: number;
+  momentum: number;
+  objective: PhaseObjective;
+  pressure: OpponentPressure;
+  matchState: MatchState;
   savedAt: string;
 };
 

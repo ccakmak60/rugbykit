@@ -744,6 +744,58 @@ h1 {
     line-height: 1.35;
 }
 
+.scoreboard-card {
+    display: grid;
+    grid-template-columns: 0.7fr 1.2fr 0.7fr 0.7fr 0.7fr;
+    gap: 12px;
+    align-items: stretch;
+    margin-bottom: 18px;
+    padding: 14px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.04)
+    );
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+}
+
+.scoreboard-card div {
+    display: grid;
+    gap: 4px;
+    align-content: center;
+    min-height: 74px;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.055);
+}
+
+.scoreboard-card span {
+    color: #aebdb2;
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.scoreboard-card strong {
+    color: #eef7ef;
+    font-size: 1.2rem;
+    font-weight: 1000;
+    letter-spacing: -0.04em;
+}
+
+.scoreboard-card .scoreline {
+    text-align: center;
+    background: rgba(184, 255, 106, 0.12);
+}
+
+.scoreboard-card .scoreline strong {
+    color: #b8ff6a;
+    font-size: 2.4rem;
+}
+
 .command-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) 360px;
@@ -811,6 +863,62 @@ h1 {
     margin: 0;
     font-weight: 850;
     line-height: 1.45;
+}
+
+.objective-card,
+.pressure-card {
+    display: grid;
+    gap: 7px;
+    margin-bottom: 14px;
+    padding: 15px;
+    border-radius: 18px;
+}
+
+.objective-card {
+    border: 1px solid rgba(184, 255, 106, 0.26);
+    background: rgba(184, 255, 106, 0.09);
+}
+
+.pressure-card {
+    border: 1px solid rgba(115, 210, 255, 0.24);
+    background: rgba(115, 210, 255, 0.08);
+}
+
+.objective-card span {
+    color: #b8ff6a;
+    font-size: 0.72rem;
+    font-weight: 950;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.pressure-card span {
+    color: #73d2ff;
+    font-size: 0.72rem;
+    font-weight: 950;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.objective-card strong,
+.pressure-card strong {
+    font-size: 1.05rem;
+    letter-spacing: -0.03em;
+}
+
+.objective-card p,
+.pressure-card p {
+    margin: 0;
+    color: #c8d9cc;
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.objective-card small,
+.pressure-card small {
+    color: #f1c94b;
+    font-weight: 900;
+    line-height: 1.35;
 }
 
 .metric-row {
@@ -1019,7 +1127,8 @@ button:focus-visible {
         justify-content: flex-start;
     }
 
-    .journey-strip {
+    .journey-strip,
+    .scoreboard-card {
         grid-template-columns: 1fr;
     }
 
