@@ -50,6 +50,8 @@ type SimulationScreenProps = {
 };
 
 function SimulationScreen(props: SimulationScreenProps) {
+  const selectedTactic = props.tactics.find((tactic) => tactic.id === props.selectedTacticId) ?? props.tactics[0];
+
   return (
     <main className="shell app-cockpit">
       <TopBar selection={props.selection} />
@@ -67,7 +69,7 @@ function SimulationScreen(props: SimulationScreenProps) {
       <JourneyStrip steps={props.sessionSteps} />
 
       <section className="command-grid">
-        <PhaseSimulator minute={props.minute} phase={props.phase} fatigue={props.player.fatigue} confidence={props.player.confidence} onSimulate={props.onSimulate} onRecover={props.onRecover} onReset={props.onReset} />
+        <PhaseSimulator minute={props.minute} phase={props.phase} fatigue={props.player.fatigue} confidence={props.player.confidence} player={props.player} squad={props.squad} tactic={selectedTactic} selectedPlayerId={props.selectedPlayerId} onSelectPlayer={props.onSelectPlayer} onSimulate={props.onSimulate} onRecover={props.onRecover} onReset={props.onReset} />
         <CoachConsole coachRead={props.coachRead} minute={props.minute} fatigue={props.player.fatigue} confidence={props.player.confidence} selection={props.selection} />
       </section>
 

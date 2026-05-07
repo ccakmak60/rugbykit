@@ -1,6 +1,7 @@
 import { Activity, Play, RotateCcw } from 'lucide-react';
 import { Component, lazy, Suspense } from 'react';
 import type { ReactNode } from 'react';
+import type { Player, Tactic } from '../game/types';
 
 const MatchSimulation3D = lazy(() => import('./three/MatchSimulation3D').then((module) => ({ default: module.MatchSimulation3D })));
 
@@ -17,6 +18,11 @@ type PhaseSimulatorProps = {
   phase: string;
   fatigue: number;
   confidence: number;
+  player: Player;
+  squad: Player[];
+  tactic: Tactic;
+  selectedPlayerId: string;
+  onSelectPlayer: (playerId: string) => void;
   onSimulate: () => void;
   onRecover: () => void;
   onReset: () => void;
@@ -43,7 +49,7 @@ class SceneBoundary extends Component<SceneBoundaryProps, SceneBoundaryState> {
   }
 }
 
-function PhaseSimulator({ minute, phase, fatigue, confidence, onSimulate, onRecover, onReset }: PhaseSimulatorProps) {
+function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tactic, selectedPlayerId, onSelectPlayer, onSimulate, onRecover, onReset }: PhaseSimulatorProps) {
   return (
     <article className="panel stage-panel">
       <div className="panel-head">
@@ -61,7 +67,7 @@ function PhaseSimulator({ minute, phase, fatigue, confidence, onSimulate, onReco
       <div className="three-stage">
         <SceneBoundary>
           <Suspense fallback={<div className="scene-fallback"><strong>Loading 3D match scene...</strong></div>}>
-            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} />
+            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} player={player} squad={squad} tactic={tactic} selectedPlayerId={selectedPlayerId} onSelectPlayer={onSelectPlayer} />
           </Suspense>
         </SceneBoundary>
         <div className="three-hud">
