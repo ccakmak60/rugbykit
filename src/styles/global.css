@@ -1071,3 +1071,31 @@ button:focus-visible {
   font-size: 0.7rem;
   line-height: 1.2;
 }
+
+.camera-controls {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: calc(100% - 36px);
+}
+
+.camera-controls button {
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  color: #eef7ef;
+  background: rgba(6, 16, 9, 0.72);
+  font-size: 0.72rem;
+  font-weight: 900;
+  backdrop-filter: blur(12px);
+}
+
+.camera-controls button.active {
+  color: #061008;
+  border-color: rgba(184,255,106,0.8);
+  background: #b8ff6a;
+}

@@ -1,9 +1,17 @@
 import { Activity, Play, RotateCcw } from 'lucide-react';
-import { Component, lazy, Suspense } from 'react';
+import { Component, lazy, Suspense, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Player, Tactic } from '../game/types';
+import type { CameraMode } from './three/CameraRig';
 
 const MatchSimulation3D = lazy(() => import('./three/MatchSimulation3D').then((module) => ({ default: module.MatchSimulation3D })));
+
+const cameraModes: { id: CameraMode; label: string }[] = [
+  { id: 'broadcast', label: 'Broadcast' },
+  { id: 'overhead', label: 'Tactical' },
+  { id: 'player', label: 'Player cam' },
+  { id: 'coach', label: 'Coach box' }
+];
 
 type SceneBoundaryProps = {
   children: ReactNode;
@@ -53,6 +61,8 @@ class SceneBoundary extends Component<SceneBoundaryProps, SceneBoundaryState> {
 }
 
 function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic, onSimulate, onRecover, onReset }: PhaseSimulatorProps) {
+  const [cameraMode, setCameraMode] = useState<CameraMode>('broadcast');
+
   return (
     <article className="panel stage-panel">
       <div className="panel-head">
@@ -70,9 +80,14 @@ function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tac
       <div className="three-stage">
         <SceneBoundary>
           <Suspense fallback={<div className="scene-fallback"><strong>Loading 3D match scene...</strong></div>}>
-            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} player={player} squad={squad} tactic={tactic} tactics={tactics} selectedPlayerId={selectedPlayerId} selectedTacticId={selectedTacticId} onSelectPlayer={onSelectPlayer} onSelectTactic={onSelectTactic} />
+            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} player={player} squad={squad} tactic={tactic} tactics={tactics} selectedPlayerId={selectedPlayerId} selectedTacticId={selectedTacticId} onSelectPlayer={onSelectPlayer} onSelectTactic={onSelectTactic} cameraMode={cameraMode} />
           </Suspense>
         </SceneBoundary>
+        <div className="camera-controls">
+          {cameraModes.map((mode) => (
+            <button className={mode.id === cameraMode ? 'active' : ''} key={mode.id} onClick={() => setCameraMode(mode.id)}>{mode.label}</button>
+          ))}
+        </div>
         <div className="three-hud">
           <strong>{phase}</strong>
           <span>Minute {minute}'</span>
