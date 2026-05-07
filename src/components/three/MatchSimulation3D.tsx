@@ -4,6 +4,7 @@ import type { Player, Tactic } from '../../game/types';
 import { Ball } from './Ball';
 import { CameraRig } from './CameraRig';
 import type { CameraMode } from './CameraRig';
+import { CoachAvatar } from './CoachAvatar';
 import { RugbyAvatar } from './RugbyAvatar';
 import { RugbyPitch } from './RugbyPitch';
 import { TacticalZones } from './TacticalZones';
@@ -32,7 +33,7 @@ type MatchSimulation3DProps = {
   cameraMode: CameraMode;
 };
 
-function Scenario({ minute, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic, cameraMode }: MatchSimulation3DProps) {
+function Scenario({ minute, phase, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic, cameraMode }: MatchSimulation3DProps) {
   const [inspectedPlayerId, setInspectedPlayerId] = useState(selectedPlayerId);
   const visibleSquad = squad.slice(0, avatarSlots.length);
 
@@ -49,6 +50,7 @@ function Scenario({ minute, player, squad, tactic, tactics, selectedPlayerId, se
       <spotLight position={[-6, 8, -6]} angle={0.45} penumbra={0.8} intensity={1.2} color="#b8ff6a" />
       <RugbyPitch />
       <TacticalZones tactics={tactics} selectedTacticId={selectedTacticId} onSelectTactic={onSelectTactic} />
+      <CoachAvatar tactic={tactic} phase={phase} />
       <Ball minute={minute} />
       {visibleSquad.map((member, index) => (
         <RugbyAvatar

@@ -1099,3 +1099,50 @@ button:focus-visible {
   border-color: rgba(184,255,106,0.8);
   background: #b8ff6a;
 }
+
+.coach-card {
+  min-width: 210px;
+  padding: 13px 15px;
+  border: 1px solid rgba(115,210,255,0.42);
+  border-radius: 18px;
+  color: #eef7ef;
+  background: rgba(6, 16, 9, 0.84);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+  backdrop-filter: blur(14px);
+  font-family: Inter, system-ui, sans-serif;
+  text-align: left;
+}
+
+.coach-card strong,
+.coach-card span,
+.coach-card small,
+.coach-card em {
+  display: block;
+}
+
+.coach-card strong {
+  color: #73d2ff;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.coach-card span {
+  margin-top: 6px;
+  font-size: 0.96rem;
+  font-weight: 950;
+}
+
+.coach-card small,
+.coach-card em {
+  margin-top: 7px;
+  color: #b9c9bd;
+  font-size: 0.78rem;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.coach-card em {
+  color: #b8ff6a;
+  font-weight: 850;
+}
