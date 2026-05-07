@@ -9,6 +9,7 @@ import { fixtures } from "./data/fixtures";
 import { basePlayer, squad } from "./data/players";
 import { tactics } from "./data/tactics";
 import { trainingFocuses } from "./data/trainingFocuses";
+import type { PhaseActionId } from "./game/actions";
 import { applyMatchStateOutcome, initialMatchState } from "./game/matchState";
 import { evaluateObjective, getPhaseObjective } from "./game/objectives";
 import { getOpponentPressure } from "./game/pressure";
@@ -53,6 +54,8 @@ function App() {
   const [week, setWeek] = useState(1);
   const [momentum, setMomentum] = useState(50);
   const [matchState, setMatchState] = useState(initialMatchState);
+  const [selectedActionId, setSelectedActionId] =
+    useState<PhaseActionId>("carry");
   const [hasSave, setHasSave] = useState(() => hasSavedSession());
 
   const selectedTactic = useMemo(
@@ -92,6 +95,7 @@ function App() {
       pressure,
       minute,
       matchState,
+      selectedActionId,
     );
     const result = evaluateObjective(objective, outcome);
     const nextMinute = Math.min(80, minute + 10);
@@ -161,6 +165,7 @@ function App() {
     setMatchState(initialMatchState);
     setObjective(getPhaseObjective(nextPlayer, selectedTactic, 0));
     setPressure(getOpponentPressure(0, 50));
+    setSelectedActionId("carry");
     setLogs([
       {
         minute: 0,
@@ -216,6 +221,7 @@ function App() {
     setPhase("Set piece launch");
     setObjective(getPhaseObjective(basePlayer, tactics[0], 0));
     setPressure(getOpponentPressure(0, 50));
+    setSelectedActionId("carry");
     setLogs([
       {
         minute: 0,
@@ -246,6 +252,7 @@ function App() {
       objective,
       pressure,
       matchState,
+      selectedActionId,
       savedAt: new Date().toISOString(),
     });
     setHasSave(true);
@@ -278,6 +285,7 @@ function App() {
         getOpponentPressure(snapshot.minute, snapshot.momentum ?? 50),
     );
     setMatchState(snapshot.matchState ?? initialMatchState);
+    setSelectedActionId(snapshot.selectedActionId ?? "carry");
     setHasSave(true);
   }
 
@@ -334,6 +342,8 @@ function App() {
       momentum={momentum}
       pressure={pressure}
       matchState={matchState}
+      selectedActionId={selectedActionId}
+      onSelectAction={setSelectedActionId}
       selectedPlayerId={selectedPlayerId}
       selectedTacticId={selectedTacticId}
       selectedFocusId={selectedFocusId}

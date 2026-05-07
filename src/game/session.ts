@@ -1,3 +1,4 @@
+import type { PhaseActionId } from "./actions";
 import type { PhaseObjective } from "./objectives";
 import type { MatchState } from "./matchState";
 import type { OpponentPressure } from "./pressure";
@@ -19,6 +20,7 @@ type SessionSnapshot = {
   objective: PhaseObjective;
   pressure: OpponentPressure;
   matchState: MatchState;
+  selectedActionId: PhaseActionId;
   savedAt: string;
 };
 
