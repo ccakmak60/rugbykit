@@ -8,6 +8,7 @@ import { CoachAvatar } from './CoachAvatar';
 import { RugbyAvatar } from './RugbyAvatar';
 import { RugbyPitch } from './RugbyPitch';
 import { TacticalZones } from './TacticalZones';
+import { getRoute } from './phaseRoutes';
 
 const avatarSlots: [number, number, number][] = [
   [-8, 0, -2.8],
@@ -36,6 +37,7 @@ type MatchSimulation3DProps = {
 function Scenario({ minute, phase, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic, cameraMode }: MatchSimulation3DProps) {
   const [inspectedPlayerId, setInspectedPlayerId] = useState(selectedPlayerId);
   const visibleSquad = squad.slice(0, avatarSlots.length);
+  const activeRoute = getRoute(tactic);
 
   function inspectPlayer(playerId: string) {
     setInspectedPlayerId(playerId);
@@ -51,13 +53,14 @@ function Scenario({ minute, phase, player, squad, tactic, tactics, selectedPlaye
       <RugbyPitch />
       <TacticalZones tactics={tactics} selectedTacticId={selectedTacticId} onSelectTactic={onSelectTactic} />
       <CoachAvatar tactic={tactic} phase={phase} />
-      <Ball minute={minute} />
+      <Ball minute={minute} tactic={tactic} />
       {visibleSquad.map((member, index) => (
         <RugbyAvatar
           key={member.id}
           player={member.id === player.id ? player : member}
           tactic={tactic}
           position={avatarSlots[index]}
+          routeEnd={member.id === selectedPlayerId ? activeRoute.end : undefined}
           kitColor={member.unit === 'backs' ? '#b8ff6a' : '#f1c94b'}
           selected={member.id === selectedPlayerId}
           inspected={member.id === inspectedPlayerId}

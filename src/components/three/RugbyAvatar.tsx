@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import type { Group } from 'three';
+import { Vector3 } from 'three';
 import type { Player, Tactic } from '../../game/types';
 import { FloatingPlayerCard } from './FloatingPlayerCard';
 
@@ -8,18 +9,24 @@ type RugbyAvatarProps = {
   player: Player;
   tactic: Tactic;
   position: [number, number, number];
+  routeEnd?: [number, number, number];
   kitColor: string;
   selected?: boolean;
   inspected?: boolean;
   onInspect: (playerId: string) => void;
 };
 
-function RugbyAvatar({ player, tactic, position, kitColor, selected = false, inspected = false, onInspect }: RugbyAvatarProps) {
+function RugbyAvatar({ player, tactic, position, routeEnd, kitColor, selected = false, inspected = false, onInspect }: RugbyAvatarProps) {
   const group = useRef<Group>(null);
+  const origin = useMemo(() => new Vector3(...position), [position]);
+  const destination = useMemo(() => new Vector3(...(routeEnd ?? position)), [routeEnd, position]);
 
   useFrame(({ clock }) => {
     if (!group.current) return;
+    const pulse = selected ? (Math.sin(clock.elapsedTime * 1.7) + 1) / 2 : 0;
+    group.current.position.lerpVectors(origin, destination, pulse);
     group.current.position.y = position[1] + Math.sin(clock.elapsedTime * 2.2 + position[0]) * 0.035;
+    if (selected) group.current.rotation.y = Math.sin(clock.elapsedTime * 1.1) * 0.2;
   });
 
   return (
