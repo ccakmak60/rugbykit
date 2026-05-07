@@ -201,6 +201,12 @@ h1 {
     position: relative;
 }
 
+.scene-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+}
+
 .three-shell {
     position: relative;
     height: 360px;
@@ -1433,8 +1439,9 @@ button:focus-visible {
 .quality-controls {
     position: absolute;
     left: 18px;
-    z-index: 3;
+    z-index: 5;
     display: flex;
+    align-items: center;
     gap: 8px;
     flex-wrap: wrap;
     max-width: calc(100% - 36px);
@@ -1446,6 +1453,22 @@ button:focus-visible {
 
 .quality-controls {
     bottom: 56px;
+}
+
+.camera-controls span,
+.quality-controls span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    color: #b9c9bd;
+    background: rgba(6, 16, 9, 0.72);
+    font-size: 0.68rem;
+    font-weight: 950;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
 }
 
 .camera-controls button,

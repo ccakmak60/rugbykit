@@ -1,4 +1,4 @@
-import { Activity, Play, RotateCcw } from "lucide-react";
+import { Activity, Gauge, Play, RotateCcw, Video } from "lucide-react";
 import { Component, lazy, Suspense, useState } from "react";
 import type { ReactNode } from "react";
 import type { Player, Tactic } from "../game/types";
@@ -115,53 +115,61 @@ function PhaseSimulator({
       </div>
 
       <div className="three-stage">
-        <SceneBoundary>
-          <Suspense
-            fallback={
-              <div className="scene-fallback">
-                <strong>Loading 3D match scene...</strong>
-              </div>
-            }
-          >
-            <MatchSimulation3D
-              minute={minute}
-              phase={phase}
-              fatigue={fatigue}
-              confidence={confidence}
-              player={player}
-              squad={squad}
-              tactic={tactic}
-              tactics={tactics}
-              selectedPlayerId={selectedPlayerId}
-              selectedTacticId={selectedTacticId}
-              onSelectPlayer={onSelectPlayer}
-              onSelectTactic={onSelectTactic}
-              cameraMode={cameraMode}
-              quality={quality}
-            />
-          </Suspense>
-        </SceneBoundary>
-        <div className="camera-controls">
-          {cameraModes.map((mode) => (
-            <button
-              className={mode.id === cameraMode ? "active" : ""}
-              key={mode.id}
-              onClick={() => setCameraMode(mode.id)}
+        <div className="scene-frame">
+          <SceneBoundary>
+            <Suspense
+              fallback={
+                <div className="scene-fallback">
+                  <strong>Loading 3D match scene...</strong>
+                </div>
+              }
             >
-              {mode.label}
-            </button>
-          ))}
-        </div>
-        <div className="quality-controls">
-          {qualityModes.map((mode) => (
-            <button
-              className={mode.id === quality ? "active" : ""}
-              key={mode.id}
-              onClick={() => setQuality(mode.id)}
-            >
-              {mode.label}
-            </button>
-          ))}
+              <MatchSimulation3D
+                minute={minute}
+                phase={phase}
+                fatigue={fatigue}
+                confidence={confidence}
+                player={player}
+                squad={squad}
+                tactic={tactic}
+                tactics={tactics}
+                selectedPlayerId={selectedPlayerId}
+                selectedTacticId={selectedTacticId}
+                onSelectPlayer={onSelectPlayer}
+                onSelectTactic={onSelectTactic}
+                cameraMode={cameraMode}
+                quality={quality}
+              />
+            </Suspense>
+          </SceneBoundary>
+          <div className="camera-controls">
+            <span>
+              <Video size={13} /> Camera
+            </span>
+            {cameraModes.map((mode) => (
+              <button
+                className={mode.id === cameraMode ? "active" : ""}
+                key={mode.id}
+                onClick={() => setCameraMode(mode.id)}
+              >
+                {mode.label}
+              </button>
+            ))}
+          </div>
+          <div className="quality-controls">
+            <span>
+              <Gauge size={13} /> Quality
+            </span>
+            {qualityModes.map((mode) => (
+              <button
+                className={mode.id === quality ? "active" : ""}
+                key={mode.id}
+                onClick={() => setQuality(mode.id)}
+              >
+                {mode.label}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="three-hud">
           <strong>{phase}</strong>
