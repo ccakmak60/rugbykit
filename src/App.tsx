@@ -85,7 +85,14 @@ function App() {
   }
 
   function simulatePhase() {
-    const outcome = resolvePhase(player, selectedTactic, momentum, pressure);
+    const outcome = resolvePhase(
+      player,
+      selectedTactic,
+      momentum,
+      pressure,
+      minute,
+      matchState,
+    );
     const result = evaluateObjective(objective, outcome);
     const nextMinute = Math.min(80, minute + 10);
     const nextPlayer = applyObjectiveResult(

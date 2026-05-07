@@ -1,6 +1,8 @@
 import type { ObjectiveResult } from "./objectives";
+import type { MatchState } from "./matchState";
 import { getPressureModifier } from "./pressure";
 import type { OpponentPressure } from "./pressure";
+import { getTraitModifier } from "./traits";
 import type {
   Drill,
   MatchEvent,
@@ -93,6 +95,8 @@ function resolvePhase(
   tactic: Tactic,
   momentum = 50,
   pressure?: OpponentPressure,
+  minute = 0,
+  matchState?: MatchState,
 ): PhaseOutcome {
   const primary = player[tactic.emphasis];
   const support = Math.round(
@@ -102,29 +106,43 @@ function resolvePhase(
   const pressureModifier = pressure
     ? getPressureModifier(tactic, pressure, momentum)
     : undefined;
+  const traitModifier = getTraitModifier(
+    player,
+    tactic,
+    pressure,
+    minute,
+    matchState,
+  );
   const score = clamp(
     primary * 0.58 +
       support * 0.34 -
       fatigueDrag -
       tactic.risk * 0.22 +
       18 +
-      (pressureModifier?.scoreDelta ?? 0),
+      (pressureModifier?.scoreDelta ?? 0) +
+      traitModifier.scoreDelta,
   );
   const success = score >= 68;
   const gain = clamp(
     (success ? Math.round(8 + score / 6) : Math.round(Math.max(0, score / 9))) +
-      (pressureModifier?.gainDelta ?? 0),
+      (pressureModifier?.gainDelta ?? 0) +
+      traitModifier.gainDelta,
   );
 
   return {
     title: success ? `${tactic.phase} gain` : `${tactic.phase} contained`,
     detail: success
-      ? `${player.name} executes ${tactic.name.toLowerCase()} and wins ${gain} metres.${pressureModifier ? ` ${pressureModifier.read}` : ""}`
-      : `${player.name} tries ${tactic.name.toLowerCase()}, but defensive pressure slows the phase.${pressureModifier ? ` ${pressureModifier.read}` : ""}`,
-    confidence: (success ? 6 : -5) + (pressureModifier?.confidenceDelta ?? 0),
+      ? `${player.name} executes ${tactic.name.toLowerCase()} and wins ${gain} metres.${pressureModifier ? ` ${pressureModifier.read}` : ""}${traitModifier.reads.length ? ` Trait activated: ${traitModifier.reads.join(" ")}` : ""}`
+      : `${player.name} tries ${tactic.name.toLowerCase()}, but defensive pressure slows the phase.${pressureModifier ? ` ${pressureModifier.read}` : ""}${traitModifier.reads.length ? ` Trait activated: ${traitModifier.reads.join(" ")}` : ""}`,
+    confidence:
+      (success ? 6 : -5) +
+      (pressureModifier?.confidenceDelta ?? 0) +
+      traitModifier.confidenceDelta,
     fatigue: Math.max(
       0,
-      tactic.fatigue + (pressureModifier?.fatigueDelta ?? 0),
+      tactic.fatigue +
+        (pressureModifier?.fatigueDelta ?? 0) +
+        traitModifier.fatigueDelta,
     ),
     form: success ? 5 : -4,
     gain,

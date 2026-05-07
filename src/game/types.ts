@@ -1,8 +1,16 @@
+type PlayerTraitId =
+  | "explosive-runner"
+  | "collision-winner"
+  | "composed-kicker"
+  | "defensive-leader"
+  | "high-motor"
+  | "big-match-temperament";
+
 type Player = {
   id: string;
   name: string;
   role: string;
-  unit: 'forwards' | 'backs';
+  unit: "forwards" | "backs";
   pace: number;
   power: number;
   handling: number;
@@ -11,6 +19,7 @@ type Player = {
   confidence: number;
   fatigue: number;
   form: number[];
+  traits: PlayerTraitId[];
 };
 
 type EventLog = {
@@ -22,7 +31,10 @@ type EventLog = {
 
 type Drill = {
   label: string;
-  stat: keyof Pick<Player, 'pace' | 'power' | 'handling' | 'defence' | 'stamina'>;
+  stat: keyof Pick<
+    Player,
+    "pace" | "power" | "handling" | "defence" | "stamina"
+  >;
   boost: number;
   fatigue: number;
   note: string;
@@ -40,7 +52,10 @@ type Tactic = {
   id: string;
   name: string;
   phase: string;
-  emphasis: keyof Pick<Player, 'pace' | 'power' | 'handling' | 'defence' | 'stamina'>;
+  emphasis: keyof Pick<
+    Player,
+    "pace" | "power" | "handling" | "defence" | "stamina"
+  >;
   risk: number;
   fatigue: number;
   detail: string;
@@ -59,7 +74,21 @@ type TrainingFocus = {
   id: string;
   name: string;
   description: string;
-  effects: Partial<Record<keyof Pick<Player, 'pace' | 'power' | 'handling' | 'defence' | 'stamina' | 'confidence' | 'fatigue'>, number>>;
+  effects: Partial<
+    Record<
+      keyof Pick<
+        Player,
+        | "pace"
+        | "power"
+        | "handling"
+        | "defence"
+        | "stamina"
+        | "confidence"
+        | "fatigue"
+      >,
+      number
+    >
+  >;
 };
 
 type SessionStep = {
@@ -68,4 +97,14 @@ type SessionStep = {
   active: boolean;
 };
 
-export type { Drill, EventLog, MatchEvent, PhaseOutcome, Player, SessionStep, Tactic, TrainingFocus };
+export type {
+  Drill,
+  EventLog,
+  MatchEvent,
+  PhaseOutcome,
+  Player,
+  PlayerTraitId,
+  SessionStep,
+  Tactic,
+  TrainingFocus,
+};
