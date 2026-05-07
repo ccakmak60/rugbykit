@@ -4,6 +4,8 @@ import type { ObjectiveResult } from "./objectives";
 import type { MatchState } from "./matchState";
 import { getPressureModifier } from "./pressure";
 import type { OpponentPressure } from "./pressure";
+import { getAttackTarget, getTargetModifier } from "./targets";
+import type { AttackTargetId } from "./targets";
 import { getTraitModifier } from "./traits";
 import type {
   Drill,
@@ -100,6 +102,7 @@ function resolvePhase(
   minute = 0,
   matchState?: MatchState,
   actionId: PhaseActionId = "carry",
+  targetId: AttackTargetId = "middle-channel",
 ): PhaseOutcome {
   const primary = player[tactic.emphasis];
   const support = Math.round(
@@ -111,6 +114,15 @@ function resolvePhase(
     : undefined;
   const action = getPhaseAction(actionId);
   const actionModifier = getActionModifier(action, tactic, pressure, player);
+  const target = getAttackTarget(targetId);
+  const targetModifier = getTargetModifier(
+    target,
+    tactic,
+    actionId,
+    pressure,
+    player,
+    matchState,
+  );
   const traitModifier = getTraitModifier(
     player,
     tactic,
@@ -126,6 +138,7 @@ function resolvePhase(
       18 +
       (pressureModifier?.scoreDelta ?? 0) +
       actionModifier.scoreDelta +
+      targetModifier.scoreDelta +
       traitModifier.scoreDelta,
   );
   const success = score >= 68;
@@ -133,24 +146,27 @@ function resolvePhase(
     (success ? Math.round(8 + score / 6) : Math.round(Math.max(0, score / 9))) +
       (pressureModifier?.gainDelta ?? 0) +
       actionModifier.gainDelta +
+      targetModifier.gainDelta +
       traitModifier.gainDelta,
   );
 
   return {
     title: success ? `${tactic.phase} gain` : `${tactic.phase} contained`,
     detail: success
-      ? `${player.name} executes ${tactic.name.toLowerCase()} and wins ${gain} metres. ${actionModifier.read}${pressureModifier ? ` ${pressureModifier.read}` : ""}${traitModifier.reads.length ? ` Trait activated: ${traitModifier.reads.join(" ")}` : ""}`
-      : `${player.name} tries ${tactic.name.toLowerCase()}, but defensive pressure slows the phase. ${actionModifier.read}${pressureModifier ? ` ${pressureModifier.read}` : ""}${traitModifier.reads.length ? ` Trait activated: ${traitModifier.reads.join(" ")}` : ""}`,
+      ? `${player.name} executes ${tactic.name.toLowerCase()} and wins ${gain} metres. ${actionModifier.read} ${targetModifier.read}${pressureModifier ? ` ${pressureModifier.read}` : ""}${traitModifier.reads.length ? ` Trait activated: ${traitModifier.reads.join(" ")}` : ""}`
+      : `${player.name} tries ${tactic.name.toLowerCase()}, but defensive pressure slows the phase. ${actionModifier.read} ${targetModifier.read}${pressureModifier ? ` ${pressureModifier.read}` : ""}${traitModifier.reads.length ? ` Trait activated: ${traitModifier.reads.join(" ")}` : ""}`,
     confidence:
       (success ? 6 : -5) +
       (pressureModifier?.confidenceDelta ?? 0) +
       actionModifier.confidenceDelta +
+      targetModifier.confidenceDelta +
       traitModifier.confidenceDelta,
     fatigue: Math.max(
       0,
       tactic.fatigue +
         (pressureModifier?.fatigueDelta ?? 0) +
         actionModifier.fatigueDelta +
+        targetModifier.fatigueDelta +
         traitModifier.fatigueDelta,
     ),
     form: success ? 5 : -4,

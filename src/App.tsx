@@ -10,6 +10,8 @@ import { basePlayer, squad } from "./data/players";
 import { tactics } from "./data/tactics";
 import { trainingFocuses } from "./data/trainingFocuses";
 import type { PhaseActionId } from "./game/actions";
+import { getAttackTarget, getTargetModifier } from "./game/targets";
+import type { AttackTargetId } from "./game/targets";
 import { applyMatchStateOutcome, initialMatchState } from "./game/matchState";
 import { evaluateObjective, getPhaseObjective } from "./game/objectives";
 import { getOpponentPressure } from "./game/pressure";
@@ -56,6 +58,8 @@ function App() {
   const [matchState, setMatchState] = useState(initialMatchState);
   const [selectedActionId, setSelectedActionId] =
     useState<PhaseActionId>("carry");
+  const [selectedTargetId, setSelectedTargetId] =
+    useState<AttackTargetId>("middle-channel");
   const [hasSave, setHasSave] = useState(() => hasSavedSession());
 
   const selectedTactic = useMemo(
@@ -96,6 +100,7 @@ function App() {
       minute,
       matchState,
       selectedActionId,
+      selectedTargetId,
     );
     const result = evaluateObjective(objective, outcome);
     const nextMinute = Math.min(80, minute + 10);
@@ -109,12 +114,21 @@ function App() {
       selectedTactic,
       nextMinute,
     );
+    const targetModifier = getTargetModifier(
+      getAttackTarget(selectedTargetId),
+      selectedTactic,
+      selectedActionId,
+      pressure,
+      player,
+      matchState,
+    );
     const matchResult = applyMatchStateOutcome(
       matchState,
       outcome,
       result,
       pressure,
       nextMomentum,
+      targetModifier,
     );
     const nextPressure = getOpponentPressure(nextMinute, nextMomentum);
 
@@ -166,6 +180,7 @@ function App() {
     setObjective(getPhaseObjective(nextPlayer, selectedTactic, 0));
     setPressure(getOpponentPressure(0, 50));
     setSelectedActionId("carry");
+    setSelectedTargetId("middle-channel");
     setLogs([
       {
         minute: 0,
@@ -222,6 +237,7 @@ function App() {
     setObjective(getPhaseObjective(basePlayer, tactics[0], 0));
     setPressure(getOpponentPressure(0, 50));
     setSelectedActionId("carry");
+    setSelectedTargetId("middle-channel");
     setLogs([
       {
         minute: 0,
@@ -253,6 +269,7 @@ function App() {
       pressure,
       matchState,
       selectedActionId,
+      selectedTargetId,
       savedAt: new Date().toISOString(),
     });
     setHasSave(true);
@@ -286,6 +303,7 @@ function App() {
     );
     setMatchState(snapshot.matchState ?? initialMatchState);
     setSelectedActionId(snapshot.selectedActionId ?? "carry");
+    setSelectedTargetId(snapshot.selectedTargetId ?? "middle-channel");
     setHasSave(true);
   }
 
@@ -319,6 +337,9 @@ function App() {
         rating={rating}
         selection={selection}
         logs={logs}
+        matchState={matchState}
+        momentum={momentum}
+        minute={minute}
         onBackToSim={() => setScreen("simulation")}
         onRestart={restartFlow}
       />
@@ -343,7 +364,9 @@ function App() {
       pressure={pressure}
       matchState={matchState}
       selectedActionId={selectedActionId}
+      selectedTargetId={selectedTargetId}
       onSelectAction={setSelectedActionId}
+      onSelectTarget={setSelectedTargetId}
       selectedPlayerId={selectedPlayerId}
       selectedTacticId={selectedTacticId}
       selectedFocusId={selectedFocusId}

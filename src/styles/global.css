@@ -867,7 +867,8 @@ h1 {
     padding: 18px;
 }
 
-.phase-action-bar {
+.phase-action-bar,
+.attack-target-bar {
     display: grid;
     gap: 12px;
     padding: 16px;
@@ -877,6 +878,15 @@ h1 {
         145deg,
         rgba(255, 255, 255, 0.09),
         rgba(255, 255, 255, 0.04)
+    );
+}
+
+.attack-target-bar {
+    border-color: rgba(115, 210, 255, 0.18);
+    background: linear-gradient(
+        145deg,
+        rgba(115, 210, 255, 0.08),
+        rgba(255, 255, 255, 0.035)
     );
 }
 
@@ -929,6 +939,11 @@ h1 {
 .phase-action.active {
     border-color: rgba(184, 255, 106, 0.58);
     background: rgba(184, 255, 106, 0.14);
+}
+
+.target-action.active {
+    border-color: rgba(115, 210, 255, 0.58);
+    background: rgba(115, 210, 255, 0.14);
 }
 
 .phase-action strong {
@@ -1419,6 +1434,72 @@ button:focus-visible {
     transform: translateY(-4px);
 }
 
+.debrief-stack {
+    display: grid;
+    gap: 16px;
+}
+
+.final-score-card {
+    display: grid;
+    gap: 6px;
+    width: fit-content;
+    margin-top: 22px;
+    padding: 18px 22px;
+    border-radius: 24px;
+    border: 1px solid rgba(184, 255, 106, 0.28);
+    background: rgba(184, 255, 106, 0.1);
+}
+
+.final-score-card span,
+.final-score-card small {
+    color: #b9c9bd;
+    font-weight: 850;
+}
+
+.final-score-card strong {
+    color: #b8ff6a;
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: -0.08em;
+}
+
+.brief-grid.two-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.key-moments-card {
+    display: grid;
+    gap: 14px;
+}
+
+.key-moment-list {
+    display: grid;
+    gap: 10px;
+}
+
+.key-moment-list div {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 4px 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.key-moment-list time {
+    grid-row: span 2;
+    color: #b8ff6a;
+    font-weight: 1000;
+}
+
+.key-moment-list strong {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.key-moment-list small {
+    color: #f1c94b;
+    font-weight: 850;
+}
+
 .screen-actions {
     display: flex;
     gap: 12px;
@@ -1439,7 +1520,8 @@ button:focus-visible {
     .brief-screen,
     .debrief-screen,
     .mode-grid,
-    .brief-grid {
+    .brief-grid,
+    .brief-grid.two-column {
         grid-template-columns: 1fr;
     }
 

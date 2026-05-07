@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import { AttackTargetBar } from "../AttackTargetBar";
 import { AttributeProfile } from "../AttributeProfile";
 import { CoachConsole } from "../CoachConsole";
 import { EventStream } from "../EventStream";
@@ -16,6 +17,7 @@ import { TrainingInterventions } from "../TrainingInterventions";
 import { TrainingWeekPanel } from "../TrainingWeekPanel";
 import type { Fixture } from "../../data/fixtures";
 import type { PhaseActionId } from "../../game/actions";
+import type { AttackTargetId } from "../../game/targets";
 import type { MatchState } from "../../game/matchState";
 import type { PhaseObjective } from "../../game/objectives";
 import type { OpponentPressure } from "../../game/pressure";
@@ -46,6 +48,7 @@ type SimulationScreenProps = {
   pressure: OpponentPressure;
   matchState: MatchState;
   selectedActionId: PhaseActionId;
+  selectedTargetId: AttackTargetId;
   selectedPlayerId: string;
   selectedTacticId: string;
   fixtures: Fixture[];
@@ -55,6 +58,7 @@ type SimulationScreenProps = {
   onSelectPlayer: (playerId: string) => void;
   onSelectTactic: (tacticId: string) => void;
   onSelectAction: (actionId: PhaseActionId) => void;
+  onSelectTarget: (targetId: AttackTargetId) => void;
   onSelectWeek: (week: number) => void;
   onSelectFocus: (focusId: string) => void;
   onApplyTrainingWeek: () => void;
@@ -126,6 +130,13 @@ function SimulationScreen(props: SimulationScreenProps) {
             tactic={selectedTactic}
             pressure={props.pressure}
             onSelectAction={props.onSelectAction}
+          />
+          <AttackTargetBar
+            selectedTargetId={props.selectedTargetId}
+            selectedActionId={props.selectedActionId}
+            tactic={selectedTactic}
+            pressure={props.pressure}
+            onSelectTarget={props.onSelectTarget}
           />
         </div>
         <CoachConsole
