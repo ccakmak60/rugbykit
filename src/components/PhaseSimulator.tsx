@@ -1,16 +1,27 @@
-import { Activity, Play, RotateCcw } from 'lucide-react';
-import { Component, lazy, Suspense, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { Player, Tactic } from '../game/types';
-import type { CameraMode } from './three/CameraRig';
+import { Activity, Play, RotateCcw } from "lucide-react";
+import { Component, lazy, Suspense, useState } from "react";
+import type { ReactNode } from "react";
+import type { Player, Tactic } from "../game/types";
+import type { CameraMode } from "./three/CameraRig";
+import type { SceneQuality } from "./three/MatchSimulation3D";
 
-const MatchSimulation3D = lazy(() => import('./three/MatchSimulation3D').then((module) => ({ default: module.MatchSimulation3D })));
+const MatchSimulation3D = lazy(() =>
+  import("./three/MatchSimulation3D").then((module) => ({
+    default: module.MatchSimulation3D,
+  })),
+);
 
 const cameraModes: { id: CameraMode; label: string }[] = [
-  { id: 'broadcast', label: 'Broadcast' },
-  { id: 'overhead', label: 'Tactical' },
-  { id: 'player', label: 'Player cam' },
-  { id: 'coach', label: 'Coach box' }
+  { id: "broadcast", label: "Broadcast" },
+  { id: "overhead", label: "Tactical" },
+  { id: "player", label: "Player cam" },
+  { id: "coach", label: "Coach box" },
+];
+
+const qualityModes: { id: SceneQuality; label: string }[] = [
+  { id: "low", label: "Low" },
+  { id: "medium", label: "Medium" },
+  { id: "high", label: "High" },
 ];
 
 type SceneBoundaryProps = {
@@ -51,7 +62,10 @@ class SceneBoundary extends Component<SceneBoundaryProps, SceneBoundaryState> {
       return (
         <div className="scene-fallback">
           <strong>3D scene failed to load.</strong>
-          <span>Player simulation controls still work. Check browser console for WebGL/module error.</span>
+          <span>
+            Player simulation controls still work. Check browser console for
+            WebGL/module error.
+          </span>
         </div>
       );
     }
@@ -60,8 +74,25 @@ class SceneBoundary extends Component<SceneBoundaryProps, SceneBoundaryState> {
   }
 }
 
-function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic, onSimulate, onRecover, onReset }: PhaseSimulatorProps) {
-  const [cameraMode, setCameraMode] = useState<CameraMode>('broadcast');
+function PhaseSimulator({
+  minute,
+  phase,
+  fatigue,
+  confidence,
+  player,
+  squad,
+  tactic,
+  tactics,
+  selectedPlayerId,
+  selectedTacticId,
+  onSelectPlayer,
+  onSelectTactic,
+  onSimulate,
+  onRecover,
+  onReset,
+}: PhaseSimulatorProps) {
+  const [cameraMode, setCameraMode] = useState<CameraMode>("broadcast");
+  const [quality, setQuality] = useState<SceneQuality>("medium");
 
   return (
     <article className="panel stage-panel">
@@ -71,21 +102,65 @@ function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tac
           <h2>Phase simulator</h2>
         </div>
         <div className="actions compact-actions">
-          <button onClick={onSimulate}><Play size={18} /> Run phase</button>
-          <button className="secondary" onClick={onRecover}><Activity size={18} /> Recover</button>
-          <button className="ghost" onClick={onReset}><RotateCcw size={18} /> Reset</button>
+          <button onClick={onSimulate}>
+            <Play size={18} /> Run phase
+          </button>
+          <button className="secondary" onClick={onRecover}>
+            <Activity size={18} /> Recover
+          </button>
+          <button className="ghost" onClick={onReset}>
+            <RotateCcw size={18} /> Reset
+          </button>
         </div>
       </div>
 
       <div className="three-stage">
         <SceneBoundary>
-          <Suspense fallback={<div className="scene-fallback"><strong>Loading 3D match scene...</strong></div>}>
-            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} player={player} squad={squad} tactic={tactic} tactics={tactics} selectedPlayerId={selectedPlayerId} selectedTacticId={selectedTacticId} onSelectPlayer={onSelectPlayer} onSelectTactic={onSelectTactic} cameraMode={cameraMode} />
+          <Suspense
+            fallback={
+              <div className="scene-fallback">
+                <strong>Loading 3D match scene...</strong>
+              </div>
+            }
+          >
+            <MatchSimulation3D
+              minute={minute}
+              phase={phase}
+              fatigue={fatigue}
+              confidence={confidence}
+              player={player}
+              squad={squad}
+              tactic={tactic}
+              tactics={tactics}
+              selectedPlayerId={selectedPlayerId}
+              selectedTacticId={selectedTacticId}
+              onSelectPlayer={onSelectPlayer}
+              onSelectTactic={onSelectTactic}
+              cameraMode={cameraMode}
+              quality={quality}
+            />
           </Suspense>
         </SceneBoundary>
         <div className="camera-controls">
           {cameraModes.map((mode) => (
-            <button className={mode.id === cameraMode ? 'active' : ''} key={mode.id} onClick={() => setCameraMode(mode.id)}>{mode.label}</button>
+            <button
+              className={mode.id === cameraMode ? "active" : ""}
+              key={mode.id}
+              onClick={() => setCameraMode(mode.id)}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
+        <div className="quality-controls">
+          {qualityModes.map((mode) => (
+            <button
+              className={mode.id === quality ? "active" : ""}
+              key={mode.id}
+              onClick={() => setQuality(mode.id)}
+            >
+              {mode.label}
+            </button>
           ))}
         </div>
         <div className="three-hud">

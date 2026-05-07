@@ -1,27 +1,42 @@
-import { Suspense, useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
-import { useGLTF } from '@react-three/drei';
-import type { GroupProps } from '@react-three/fiber';
+import { Suspense, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useGLTF } from "@react-three/drei";
+import type { GroupProps } from "@react-three/fiber";
+import { checkAsset, getModelAsset } from "./assets";
+import type { AssetStatus } from "./assets";
+
+const coachAsset = getModelAsset("coach");
 
 type CoachModelProps = GroupProps & {
   fallback: ReactNode;
+  onStatusChange?: (status: AssetStatus) => void;
 };
 
 function CoachModelInner(props: GroupProps) {
-  const model = useGLTF('/models/coach.glb');
+  const model = useGLTF(coachAsset.path);
   return <primitive object={model.scene.clone()} {...props} />;
 }
 
-function CoachModel({ fallback, ...props }: CoachModelProps) {
-  const [assetExists, setAssetExists] = useState(false);
+function CoachModel({ fallback, onStatusChange, ...props }: CoachModelProps) {
+  const [status, setStatus] = useState<AssetStatus>("checking");
 
   useEffect(() => {
-    fetch('/models/coach.glb', { method: 'HEAD' })
-      .then((res) => setAssetExists(res.ok))
-      .catch(() => setAssetExists(false));
-  }, []);
+    let active = true;
+    onStatusChange?.("checking");
 
-  if (!assetExists) return <>{fallback}</>;
+    checkAsset(coachAsset.path).then((exists) => {
+      if (!active) return;
+      const nextStatus: AssetStatus = exists ? "ready" : "missing";
+      setStatus(nextStatus);
+      onStatusChange?.(nextStatus);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [onStatusChange]);
+
+  if (status !== "ready") return <>{fallback}</>;
 
   return (
     <Suspense fallback={fallback}>
@@ -29,5 +44,7 @@ function CoachModel({ fallback, ...props }: CoachModelProps) {
     </Suspense>
   );
 }
+
+useGLTF.preload(coachAsset.path);
 
 export { CoachModel };
