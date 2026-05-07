@@ -69,7 +69,7 @@ function SimulationScreen(props: SimulationScreenProps) {
       <JourneyStrip steps={props.sessionSteps} />
 
       <section className="command-grid">
-        <PhaseSimulator minute={props.minute} phase={props.phase} fatigue={props.player.fatigue} confidence={props.player.confidence} player={props.player} squad={props.squad} tactic={selectedTactic} selectedPlayerId={props.selectedPlayerId} onSelectPlayer={props.onSelectPlayer} onSimulate={props.onSimulate} onRecover={props.onRecover} onReset={props.onReset} />
+        <PhaseSimulator minute={props.minute} phase={props.phase} fatigue={props.player.fatigue} confidence={props.player.confidence} player={props.player} squad={props.squad} tactic={selectedTactic} tactics={props.tactics} selectedPlayerId={props.selectedPlayerId} selectedTacticId={props.selectedTacticId} onSelectPlayer={props.onSelectPlayer} onSelectTactic={props.onSelectTactic} onSimulate={props.onSimulate} onRecover={props.onRecover} onReset={props.onReset} />
         <CoachConsole coachRead={props.coachRead} minute={props.minute} fatigue={props.player.fatigue} confidence={props.player.confidence} selection={props.selection} />
       </section>
 

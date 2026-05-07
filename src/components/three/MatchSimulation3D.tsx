@@ -4,6 +4,7 @@ import type { Player, Tactic } from '../../game/types';
 import { Ball } from './Ball';
 import { RugbyAvatar } from './RugbyAvatar';
 import { RugbyPitch } from './RugbyPitch';
+import { TacticalZones } from './TacticalZones';
 
 const avatarSlots: [number, number, number][] = [
   [-8, 0, -2.8],
@@ -21,11 +22,14 @@ type MatchSimulation3DProps = {
   player: Player;
   squad: Player[];
   tactic: Tactic;
+  tactics: Tactic[];
   selectedPlayerId: string;
+  selectedTacticId: string;
   onSelectPlayer: (playerId: string) => void;
+  onSelectTactic: (tacticId: string) => void;
 };
 
-function Scenario({ minute, player, squad, tactic, selectedPlayerId, onSelectPlayer }: MatchSimulation3DProps) {
+function Scenario({ minute, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic }: MatchSimulation3DProps) {
   const [inspectedPlayerId, setInspectedPlayerId] = useState(selectedPlayerId);
   const visibleSquad = squad.slice(0, avatarSlots.length);
 
@@ -40,6 +44,7 @@ function Scenario({ minute, player, squad, tactic, selectedPlayerId, onSelectPla
       <directionalLight position={[4, 10, 5]} intensity={1.7} castShadow shadow-mapSize={[2048, 2048]} />
       <spotLight position={[-6, 8, -6]} angle={0.45} penumbra={0.8} intensity={1.2} color="#b8ff6a" />
       <RugbyPitch />
+      <TacticalZones tactics={tactics} selectedTacticId={selectedTacticId} onSelectTactic={onSelectTactic} />
       <Ball minute={minute} />
       {visibleSquad.map((member, index) => (
         <RugbyAvatar

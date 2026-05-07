@@ -21,8 +21,11 @@ type PhaseSimulatorProps = {
   player: Player;
   squad: Player[];
   tactic: Tactic;
+  tactics: Tactic[];
   selectedPlayerId: string;
+  selectedTacticId: string;
   onSelectPlayer: (playerId: string) => void;
+  onSelectTactic: (tacticId: string) => void;
   onSimulate: () => void;
   onRecover: () => void;
   onReset: () => void;
@@ -49,7 +52,7 @@ class SceneBoundary extends Component<SceneBoundaryProps, SceneBoundaryState> {
   }
 }
 
-function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tactic, selectedPlayerId, onSelectPlayer, onSimulate, onRecover, onReset }: PhaseSimulatorProps) {
+function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tactic, tactics, selectedPlayerId, selectedTacticId, onSelectPlayer, onSelectTactic, onSimulate, onRecover, onReset }: PhaseSimulatorProps) {
   return (
     <article className="panel stage-panel">
       <div className="panel-head">
@@ -67,7 +70,7 @@ function PhaseSimulator({ minute, phase, fatigue, confidence, player, squad, tac
       <div className="three-stage">
         <SceneBoundary>
           <Suspense fallback={<div className="scene-fallback"><strong>Loading 3D match scene...</strong></div>}>
-            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} player={player} squad={squad} tactic={tactic} selectedPlayerId={selectedPlayerId} onSelectPlayer={onSelectPlayer} />
+            <MatchSimulation3D minute={minute} phase={phase} fatigue={fatigue} confidence={confidence} player={player} squad={squad} tactic={tactic} tactics={tactics} selectedPlayerId={selectedPlayerId} selectedTacticId={selectedTacticId} onSelectPlayer={onSelectPlayer} onSelectTactic={onSelectTactic} />
           </Suspense>
         </SceneBoundary>
         <div className="three-hud">
