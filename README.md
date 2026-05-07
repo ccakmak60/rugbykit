@@ -1,8 +1,7 @@
 # RugbyKit
 
-RugbyKit is a player simulation prototype inspired by the structure of `medkit-app`, but focused on rugby performance instead of medical workflows.
+RugbyKit is a player simulation prototype 
 
-## Current MVP
 
 - Player profile with core rugby attributes
 - Training drills that change stats, fatigue and confidence
