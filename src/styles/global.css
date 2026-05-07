@@ -1680,6 +1680,15 @@ button:focus-visible {
     line-height: 1.2;
 }
 
+.target-zone-label {
+    border-color: rgba(115, 210, 255, 0.32);
+}
+
+.target-zone-label.active {
+    border-color: rgba(115, 210, 255, 0.72);
+    background: rgba(115, 210, 255, 0.18);
+}
+
 .camera-controls,
 .quality-controls {
     position: absolute;

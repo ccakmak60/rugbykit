@@ -1,6 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useMemo, useState } from "react";
+import type { AttackTargetId } from "../../game/targets";
 import type { Player, Tactic } from "../../game/types";
+import { AttackTargetZones } from "./AttackTargetZones";
 import { Ball } from "./Ball";
 import { CameraRig } from "./CameraRig";
 import type { CameraMode } from "./CameraRig";
@@ -39,6 +41,8 @@ type MatchSimulation3DProps = {
   selectedTacticId: string;
   onSelectPlayer: (playerId: string) => void;
   onSelectTactic: (tacticId: string) => void;
+  selectedTargetId: AttackTargetId;
+  onSelectTarget: (targetId: AttackTargetId) => void;
   cameraMode: CameraMode;
   quality: SceneQuality;
 };
@@ -60,6 +64,8 @@ function Scenario({
   selectedTacticId,
   onSelectPlayer,
   onSelectTactic,
+  selectedTargetId,
+  onSelectTarget,
   cameraMode,
   audioEnabled,
   quality,
@@ -120,6 +126,12 @@ function Scenario({
         tactics={tactics}
         selectedTacticId={selectedTacticId}
         onSelectTactic={onSelectTactic}
+        animationState={environmentState}
+        animationIntensity={environmentIntensity}
+      />
+      <AttackTargetZones
+        selectedTargetId={selectedTargetId}
+        onSelectTarget={onSelectTarget}
         animationState={environmentState}
         animationIntensity={environmentIntensity}
       />

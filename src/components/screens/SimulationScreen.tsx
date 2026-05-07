@@ -119,8 +119,10 @@ function SimulationScreen(props: SimulationScreenProps) {
             tactics={props.tactics}
             selectedPlayerId={props.selectedPlayerId}
             selectedTacticId={props.selectedTacticId}
+            selectedTargetId={props.selectedTargetId}
             onSelectPlayer={props.onSelectPlayer}
             onSelectTactic={props.onSelectTactic}
+            onSelectTarget={props.onSelectTarget}
             onSimulate={props.onSimulate}
             onRecover={props.onRecover}
             onReset={props.onReset}

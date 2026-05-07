@@ -2,6 +2,7 @@ import { Activity, Gauge, Play, RotateCcw, Video } from "lucide-react";
 import { Component, lazy, Suspense, useState } from "react";
 import type { ReactNode } from "react";
 import type { Player, Tactic } from "../game/types";
+import type { AttackTargetId } from "../game/targets";
 import type { CameraMode } from "./three/CameraRig";
 import type { SceneQuality } from "./three/MatchSimulation3D";
 
@@ -45,6 +46,8 @@ type PhaseSimulatorProps = {
   selectedTacticId: string;
   onSelectPlayer: (playerId: string) => void;
   onSelectTactic: (tacticId: string) => void;
+  selectedTargetId: AttackTargetId;
+  onSelectTarget: (targetId: AttackTargetId) => void;
   onSimulate: () => void;
   onRecover: () => void;
   onReset: () => void;
@@ -87,6 +90,8 @@ function PhaseSimulator({
   selectedTacticId,
   onSelectPlayer,
   onSelectTactic,
+  selectedTargetId,
+  onSelectTarget,
   onSimulate,
   onRecover,
   onReset,
@@ -137,6 +142,8 @@ function PhaseSimulator({
                 selectedTacticId={selectedTacticId}
                 onSelectPlayer={onSelectPlayer}
                 onSelectTactic={onSelectTactic}
+                selectedTargetId={selectedTargetId}
+                onSelectTarget={onSelectTarget}
                 cameraMode={cameraMode}
                 quality={quality}
               />
