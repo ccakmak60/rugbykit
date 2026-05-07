@@ -145,6 +145,7 @@ function SimulationScreen(props: SimulationScreenProps) {
           fatigue={props.player.fatigue}
           confidence={props.player.confidence}
           selection={props.selection}
+          condition={props.player.condition}
           objective={props.objective}
           momentum={props.momentum}
           pressure={props.pressure}

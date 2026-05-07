@@ -175,6 +175,28 @@ h1 {
     letter-spacing: -0.08em;
 }
 
+.condition-pill {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 8px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    color: #061008;
+    background: #b8ff6a;
+    font-size: 0.68rem;
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.condition-pill.knock {
+    background: #f1c94b;
+}
+
+.condition-pill.strained {
+    color: #eef7ef;
+    background: #ff7a59;
+}
+
 .trait-list {
     display: flex;
     gap: 6px;

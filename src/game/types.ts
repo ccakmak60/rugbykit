@@ -1,3 +1,5 @@
+type PlayerCondition = "fit" | "knock" | "strained";
+
 type PlayerTraitId =
   | "explosive-runner"
   | "collision-winner"
@@ -20,6 +22,7 @@ type Player = {
   fatigue: number;
   form: number[];
   traits: PlayerTraitId[];
+  condition: PlayerCondition;
 };
 
 type EventLog = {
@@ -103,6 +106,7 @@ export type {
   MatchEvent,
   PhaseOutcome,
   Player,
+  PlayerCondition,
   PlayerTraitId,
   SessionStep,
   Tactic,

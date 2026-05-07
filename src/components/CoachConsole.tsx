@@ -1,8 +1,10 @@
 import { Trophy } from "lucide-react";
+import { getConditionLabel } from "../game/injury";
 import type { MatchState } from "../game/matchState";
 import { getMatchResult } from "../game/matchState";
 import type { PhaseObjective } from "../game/objectives";
 import type { OpponentPressure } from "../game/pressure";
+import type { PlayerCondition } from "../game/types";
 
 type CoachConsoleProps = {
   coachRead: string;
@@ -10,6 +12,7 @@ type CoachConsoleProps = {
   fatigue: number;
   confidence: number;
   selection: string;
+  condition: PlayerCondition;
   objective: PhaseObjective;
   momentum: number;
   pressure: OpponentPressure;
@@ -22,6 +25,7 @@ function CoachConsole({
   fatigue,
   confidence,
   selection,
+  condition,
   objective,
   momentum,
   pressure,
@@ -79,6 +83,10 @@ function CoachConsole({
       <div className="metric-row">
         <span>Fatigue load</span>
         <strong>{fatigue}%</strong>
+      </div>
+      <div className="metric-row">
+        <span>Condition</span>
+        <strong>{getConditionLabel(condition)}</strong>
       </div>
       <div className="metric-row">
         <span>Confidence</span>

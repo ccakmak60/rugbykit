@@ -1,3 +1,4 @@
+import { getConditionLabel } from "../../game/injury";
 import {
   getCoachVerdict,
   getFinalResult,
@@ -80,6 +81,11 @@ function DebriefScreen({
             <span>Fatigue</span>
             <strong>{player.fatigue}%</strong>
             <p>Load carried into the next block.</p>
+          </article>
+          <article className="brief-card">
+            <span>Condition</span>
+            <strong>{getConditionLabel(player.condition)}</strong>
+            <p>Availability read for the next training block.</p>
           </article>
         </div>
 

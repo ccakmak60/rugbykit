@@ -1,3 +1,4 @@
+import { getConditionLabel } from "../game/injury";
 import { getPlayerTraits } from "../game/traits";
 import type { Player } from "../game/types";
 
@@ -17,6 +18,9 @@ function PlayerCard({ player, rating, selection }: PlayerCardProps) {
         <p>{player.role}</p>
         <h2>{player.name}</h2>
         <span>{selection}</span>
+        <small className={`condition-pill ${player.condition}`}>
+          {getConditionLabel(player.condition)}
+        </small>
         <div className="trait-list compact">
           {traits.map((trait) => (
             <em key={trait.id}>{trait.name}</em>

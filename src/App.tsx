@@ -10,6 +10,7 @@ import { basePlayer, squad } from "./data/players";
 import { tactics } from "./data/tactics";
 import { trainingFocuses } from "./data/trainingFocuses";
 import type { PhaseActionId } from "./game/actions";
+import { applyLoadEvent, getLoadRisk, resolveLoadEvent } from "./game/injury";
 import { getAttackTarget, getTargetModifier } from "./game/targets";
 import type { AttackTargetId } from "./game/targets";
 import { applyMatchStateOutcome, initialMatchState } from "./game/matchState";
@@ -104,9 +105,18 @@ function App() {
     );
     const result = evaluateObjective(objective, outcome);
     const nextMinute = Math.min(80, minute + 10);
-    const nextPlayer = applyObjectiveResult(
-      applyPhaseOutcome(player, outcome),
-      result,
+    const loadRisk = getLoadRisk(
+      player,
+      selectedTactic,
+      selectedActionId,
+      selectedTargetId,
+      pressure,
+      minute,
+    );
+    const loadEvent = resolveLoadEvent(player, loadRisk);
+    const nextPlayer = applyLoadEvent(
+      applyObjectiveResult(applyPhaseOutcome(player, outcome), result),
+      loadEvent,
     );
     const nextMomentum = clamp(momentum + result.momentumDelta);
     const nextObjective = getPhaseObjective(
@@ -140,6 +150,12 @@ function App() {
     setPressure(nextPressure);
     setMatchState(matchResult.matchState);
     setLogs((current) => [
+      {
+        minute: nextMinute,
+        title: loadEvent.title,
+        detail: loadEvent.detail,
+        impact: `${loadEvent.impact}, risk ${loadRisk}`,
+      },
       {
         minute: nextMinute,
         title: matchResult.title,
@@ -192,7 +208,13 @@ function App() {
   }
 
   function recover() {
-    const recovered = recoverPlayer(player);
+    const recovered = {
+      ...recoverPlayer(player),
+      condition:
+        player.condition === "strained" && player.fatigue > 55
+          ? ("knock" as const)
+          : ("fit" as const),
+    };
     setPlayer(recovered);
     setMomentum((current) => clamp(current + 4));
     setObjective(getPhaseObjective(recovered, selectedTactic, minute));
@@ -202,7 +224,8 @@ function App() {
         minute,
         title: "Recovery Block",
         detail: "Mobility, sleep, nutrition and review session.",
-        impact: "-18 fatigue, +3 confidence, +4 momentum stability",
+        impact:
+          "-18 fatigue, +3 confidence, +4 momentum stability, condition improved",
       },
       ...current,
     ]);

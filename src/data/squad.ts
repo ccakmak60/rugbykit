@@ -15,6 +15,7 @@ const squad: Player[] = [
     fatigue: 18,
     form: [61, 67, 70, 66, 73, 76],
     traits: ["explosive-runner", "big-match-temperament"],
+    condition: "fit",
   },
   {
     id: "okafor-08",
@@ -30,6 +31,7 @@ const squad: Player[] = [
     fatigue: 24,
     form: [70, 72, 69, 75, 77, 74],
     traits: ["collision-winner", "high-motor"],
+    condition: "fit",
   },
   {
     id: "liu-09",
@@ -45,6 +47,7 @@ const squad: Player[] = [
     fatigue: 16,
     form: [74, 71, 78, 80, 77, 79],
     traits: ["composed-kicker", "high-motor"],
+    condition: "fit",
   },
   {
     id: "mccabe-05",
@@ -60,6 +63,7 @@ const squad: Player[] = [
     fatigue: 31,
     form: [66, 68, 71, 69, 65, 70],
     traits: ["collision-winner", "defensive-leader"],
+    condition: "fit",
   },
   {
     id: "ramos-15",
@@ -75,6 +79,7 @@ const squad: Player[] = [
     fatigue: 20,
     form: [72, 76, 73, 78, 80, 77],
     traits: ["explosive-runner", "composed-kicker"],
+    condition: "fit",
   },
 ];
 
