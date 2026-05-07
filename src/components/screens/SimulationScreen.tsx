@@ -29,6 +29,7 @@ import type {
   Tactic,
   TrainingFocus,
 } from "../../game/types";
+import type { PhaseVisualResult } from "../../game/visuals";
 
 type SimulationScreenProps = {
   player: Player;
@@ -49,6 +50,7 @@ type SimulationScreenProps = {
   matchState: MatchState;
   selectedActionId: PhaseActionId;
   selectedTargetId: AttackTargetId;
+  phaseVisual: PhaseVisualResult | null;
   selectedPlayerId: string;
   selectedTacticId: string;
   fixtures: Fixture[];
@@ -120,6 +122,7 @@ function SimulationScreen(props: SimulationScreenProps) {
             selectedPlayerId={props.selectedPlayerId}
             selectedTacticId={props.selectedTacticId}
             selectedTargetId={props.selectedTargetId}
+            phaseVisual={props.phaseVisual}
             onSelectPlayer={props.onSelectPlayer}
             onSelectTactic={props.onSelectTactic}
             onSelectTarget={props.onSelectTarget}

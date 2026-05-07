@@ -37,6 +37,7 @@ import {
   saveSession,
 } from "./game/storage";
 import type { Drill, EventLog, Player } from "./game/types";
+import type { PhaseVisualResult } from "./game/visuals";
 
 function App() {
   const [screen, setScreen] = useState<AppScreen>("home");
@@ -61,6 +62,9 @@ function App() {
     useState<PhaseActionId>("carry");
   const [selectedTargetId, setSelectedTargetId] =
     useState<AttackTargetId>("middle-channel");
+  const [phaseVisual, setPhaseVisual] = useState<PhaseVisualResult | null>(
+    null,
+  );
   const [hasSave, setHasSave] = useState(() => hasSavedSession());
 
   const selectedTactic = useMemo(
@@ -149,6 +153,33 @@ function App() {
     setObjective(nextObjective);
     setPressure(nextPressure);
     setMatchState(matchResult.matchState);
+    setPhaseVisual({
+      id: Date.now(),
+      kind:
+        matchResult.title.toLowerCase().includes("try") ||
+        matchResult.title.toLowerCase().includes("penalty")
+          ? "score"
+          : result.success
+            ? "success"
+            : loadEvent.risk === "high" || loadEvent.risk === "critical"
+              ? "load-warning"
+              : "contained",
+      label: matchResult.title.toLowerCase().includes("try")
+        ? "TRY!"
+        : matchResult.title.toLowerCase().includes("penalty")
+          ? "PENALTY"
+          : result.success
+            ? `+${outcome.gain}m`
+            : "CONTAINED",
+      detail: result.success
+        ? result.title
+        : loadEvent.risk === "high" || loadEvent.risk === "critical"
+          ? loadEvent.title
+          : result.title,
+      gain: outcome.gain,
+      actionId: selectedActionId,
+      targetId: selectedTargetId,
+    });
     setLogs((current) => [
       {
         minute: nextMinute,
@@ -390,6 +421,7 @@ function App() {
       selectedTargetId={selectedTargetId}
       onSelectAction={setSelectedActionId}
       onSelectTarget={setSelectedTargetId}
+      phaseVisual={phaseVisual}
       selectedPlayerId={selectedPlayerId}
       selectedTacticId={selectedTacticId}
       selectedFocusId={selectedFocusId}

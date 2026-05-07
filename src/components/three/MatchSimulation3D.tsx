@@ -2,11 +2,13 @@ import { Canvas } from "@react-three/fiber";
 import { useEffect, useMemo, useState } from "react";
 import type { AttackTargetId } from "../../game/targets";
 import type { Player, Tactic } from "../../game/types";
+import type { PhaseVisualResult } from "../../game/visuals";
 import { AttackTargetZones } from "./AttackTargetZones";
 import { Ball } from "./Ball";
 import { CameraRig } from "./CameraRig";
 import type { CameraMode } from "./CameraRig";
 import { CoachAvatar } from "./CoachAvatar";
+import { PhaseReplay } from "./PhaseReplay";
 import { RugbyAvatar } from "./RugbyAvatar";
 import { RugbyPitch } from "./RugbyPitch";
 import { TacticalZones } from "./TacticalZones";
@@ -42,6 +44,7 @@ type MatchSimulation3DProps = {
   onSelectPlayer: (playerId: string) => void;
   onSelectTactic: (tacticId: string) => void;
   selectedTargetId: AttackTargetId;
+  phaseVisual: PhaseVisualResult | null;
   onSelectTarget: (targetId: AttackTargetId) => void;
   cameraMode: CameraMode;
   quality: SceneQuality;
@@ -65,6 +68,7 @@ function Scenario({
   onSelectPlayer,
   onSelectTactic,
   selectedTargetId,
+  phaseVisual,
   onSelectTarget,
   cameraMode,
   audioEnabled,
@@ -135,6 +139,7 @@ function Scenario({
         animationState={environmentState}
         animationIntensity={environmentIntensity}
       />
+      <PhaseReplay visual={phaseVisual} />
       <CoachAvatar
         tactic={tactic}
         phase={phase}
